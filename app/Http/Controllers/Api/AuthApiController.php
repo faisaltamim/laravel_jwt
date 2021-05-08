@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Throwable;
-use Illuminate\Support\Facades\Auth;
 
 class AuthApiController extends Controller {
     // middleware
@@ -17,8 +17,13 @@ class AuthApiController extends Controller {
     }
 
     public function index() {
-        $users = User::all();
-        return $users;
+        $users    = User::all();
+        $jsonData = [
+            // note : 'UserResource::collection( $users )' eite use hobe multiple data pawar jonno ..ar single data pawar jonno use hobe just "new UserResource( $users )" etotuku
+            'data'    => UserResource::collection( $users ), //eita use kora hoise specific data pawar jonno resourceController er sahajje..
+            'success' => true,
+        ];
+        return response()->json( $jsonData, 401 );
 
     }
 
